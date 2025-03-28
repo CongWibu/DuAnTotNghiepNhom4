@@ -61,6 +61,10 @@ public class PlayerController : MonoBehaviour
         {
             SceneManager.LoadScene(gameOverScene);
         }
+        else
+        {
+            StartCoroutine(InvincibilityTimer()); // Kích hoạt bất tử 3 giây sau khi mất máu
+        }
     }
 
     void UpdateHealthUI()

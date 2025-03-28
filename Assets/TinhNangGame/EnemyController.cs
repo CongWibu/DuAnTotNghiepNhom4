@@ -26,9 +26,18 @@ public class EnemyController : MonoBehaviour
 
     void Shoot()
     {
-        Instantiate(enemyBulletPrefab, firePoint.position, firePoint.rotation);
-    }
+        if (player == null || enemyBulletPrefab == null || firePoint == null)
+            return;
 
+        GameObject bullet = Instantiate(enemyBulletPrefab, firePoint.position, Quaternion.identity);
+        EnemyBullet bulletScript = bullet.GetComponent<EnemyBullet>();
+
+        if (bulletScript != null)
+        {
+            Vector2 direction = (player.position - firePoint.position).normalized;
+            bulletScript.SetDirection(direction);
+        }
+    }
     public void TakeDamage(int damage)
     {
         health -= damage;

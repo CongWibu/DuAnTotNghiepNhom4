@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
@@ -7,6 +5,7 @@ public class EnemyBullet : MonoBehaviour
     public float speed = 5f;
     public int damage = 1;
     public float lifeTime = 2f;
+    private Vector2 direction;
 
     void Start()
     {
@@ -15,7 +14,12 @@ public class EnemyBullet : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector2.left * speed * Time.deltaTime);
+        transform.Translate(direction * speed * Time.deltaTime);
+    }
+
+    public void SetDirection(Vector2 newDirection)
+    {
+        direction = newDirection.normalized;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
