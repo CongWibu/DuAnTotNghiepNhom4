@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;
+    public float speed = 10f;
     public float jumpForce = 10f;
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -33,6 +33,12 @@ public class PlayerController : MonoBehaviour
         float move = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(move * speed, rb.velocity.y);
 
+        // Cập nhật hướng quay của nhân vật mà không thay đổi kích thước
+        if (move > 0)
+            transform.rotation = Quaternion.Euler(0, 0, 0); // Quay mặt sang phải
+        else if (move < 0)
+            transform.rotation = Quaternion.Euler(0, 180, 0); // Quay sang trái bằng cách lật trục Y
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -46,7 +52,12 @@ public class PlayerController : MonoBehaviour
 
     void Shoot()
     {
-        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        PlayerBullet bulletScript = bullet.GetComponent<PlayerBullet>();
+
+        // Lấy hướng của nhân vật để xác định hướng bắn
+        float direction = transform.localScale.x > 0 ? 1 : -1; // Nếu nhân vật quay phải, direction = 1, nếu quay trái, direction = -1
+        bulletScript.SetDirection(new Vector2(direction, 0)); // Gán hướng cho viên đạn
     }
 
     public void TakeDamage(int damage)
